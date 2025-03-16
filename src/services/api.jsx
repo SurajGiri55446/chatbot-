@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/qna/ask";
+// Use the deployed backend URL instead of localhost
+const API_URL =
+  "https://chatbot-backend-production-1dcd.up.railway.app/api/qna/ask";
 
 export const fetchChatResponse = async (question) => {
   try {
