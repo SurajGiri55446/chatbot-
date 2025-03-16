@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion"; // Import Framer Motion
 import ChatInput from "./components/ChatInput";
 import ChatResponse from "./components/ChatResponse";
 import { fetchChatResponse } from "./services/api";
@@ -28,17 +29,20 @@ function App() {
 
   return (
     <div
-      className={`flex flex-col min-h-screen ${
+      className={`flex flex-col min-h-screen transition-colors duration-300 ${
         isDarkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-950"
       }`}
     >
       {/* Header Section */}
-      <header
-        className={`flex items-center justify-between px-6 py-4 ${
+      <motion.header
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className={`flex items-center justify-between px-6 py-4 shadow-md ${
           isDarkMode ? "bg-gray-800" : "bg-gray-800"
-        } shadow-md`}
+        }`}
       >
-        <h1 className="flex items-center gap-2 text-xl font-bold text-white">
+        <h1 className="flex items-center gap-2 text-2xl font-bold text-white">
           <span className="text-white">💬</span> ChatBot
         </h1>
         <div className="flex items-center gap-4">
@@ -54,49 +58,72 @@ function App() {
           </button>
           <FiSettings className="text-xl text-white transition-transform cursor-pointer hover:rotate-90" />
         </div>
-      </header>
+      </motion.header>
 
       {/* Main Chat Section */}
       <main className="flex flex-col items-center justify-center flex-grow p-6">
-        {!response && !loading && (
-          <div className="text-center">
-            <span className="text-6xl">💭</span>
-            <h2 className="mt-2 text-2xl font-bold text-gray-600">
-              Welcome to ChatBot
-            </h2>
-            <p className="text-sm text-gray-700">
-              Ask me anything to get started!
-            </p>
-          </div>
-        )}
+        <AnimatePresence>
+          {!response && !loading && (
+            <motion.div
+              key="welcome"
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              className="text-center"
+            >
+              <span className="text-8xl">💭</span>
+              <h2 className="mt-4 text-3xl font-bold text-gray-600">
+                Welcome to ChatBot
+              </h2>
+              <p className="mt-2 text-lg text-gray-700">
+                Ask me anything to get started!
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {loading && (
-          <h3 className="mt-4 text-blue-500 animate-pulse">Searching...</h3>
+          <motion.h3
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="mt-6 text-xl text-blue-500 animate-pulse"
+          >
+            Searching...
+          </motion.h3>
         )}
 
         <ChatResponse response={response} isDarkMode={isDarkMode} />
       </main>
 
       {/* Chat Input Section */}
-      <div className="flex items-center justify-center w-full px-4 pb-4">
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="flex items-center justify-center w-full px-4 pb-6"
+      >
         <div
-          className={`flex items-center w-full max-w-2xl px-4 py-2 rounded-full shadow-lg ${
+          className={`flex items-center w-full max-w-2xl px-4 py-2 rounded-full shadow-lg transition-colors duration-300 ${
             isDarkMode ? "bg-gray-800" : "bg-white"
           }`}
         >
           <ChatInput onSubmit={handleQuestionSubmit} isDarkMode={isDarkMode} />
         </div>
-      </div>
+      </motion.div>
 
       {/* Footer Section */}
-      <footer
-        className={`py-3 text-sm text-center ${
-          isDarkMode ? "bg-gray-700 text-gray-300" : "bg-gray-800 text-gray-100"
+      <motion.footer
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className={`py-4 text-sm text-center transition-colors duration-300 ${
+          isDarkMode ? "bg-gray-800 text-gray-300" : "bg-gray-900 text-gray-100"
         }`}
       >
         &copy; {new Date().getFullYear()} ChatBot. All Rights Reserved & Created
-        by<h2>@ suraj Giri.</h2>
-      </footer>
+        by <span className="font-semibold">@suraj Giri</span>.
+      </motion.footer>
     </div>
   );
 }
