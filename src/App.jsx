@@ -12,6 +12,7 @@ function App() {
 
   const handleQuestionSubmit = async (question) => {
     setLoading(true);
+    c;
     setResponse(null);
     try {
       const apiResponse = await fetchChatResponse(question);
